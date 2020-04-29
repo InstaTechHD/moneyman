@@ -1,0 +1,68 @@
+Table accounts {
+  id int [pk, increment]
+  name text [not null]
+  type_id int [not null]
+  currency_id int [ref: > currencies.id, not null]
+}
+
+Table currencies {
+  id int [pk]
+  code text [not null]
+  symbol text [not null]
+  multiplier int [not null]
+  symbol_before boolean [not null]
+}
+
+Table payees {
+  id int [pk]
+  name text [not null, unique]
+}
+
+Table categories {
+  id int [pk]
+  type_id int [not null]
+  name text [not null, unique]
+}
+
+Table transactions {
+  id uuid [pk]
+  account_id int [ref: > accounts.id, not null]
+  type_id int [not null]
+  date date [not null]
+  status_id int [not null]
+  payee_id int [ref: > payees.id]
+  category_id int [ref: > categories.id]
+  amount bigint [not null]
+  notes text
+  // If it's true it indicates that there are children
+  split boolean [not null]
+  parent_transaction_id int [ref: > transactions.id]
+}
+
+Table transfers {
+  out_transaction_id int [ref: - transactions.id, not null, unique]
+  in_transaction_id int [ref: - transactions.id, not null, unique]
+}
+
+Table recurring_transactions {
+  id int [pk]
+  account_id int [ref: > accounts.id, not null]
+  type_id int [not null]
+  payee_id int [ref: > payees.id]
+  start_date date [not null]
+  end_date date
+  schedule json
+  amount bigint [not null]
+  amount_type int [not null]
+  amount_avg_num_occur int
+  category_id int [ref: > categories.id]
+  notes text
+  auto_enter boolean [not null]
+}
+
+Table budget_items {
+  id int [pk]
+  category_id int [ref: - categories.id, not null]
+  interval_id int [not null]
+  amount json [note: 'Can hold either a single value or a map of values']
+}
