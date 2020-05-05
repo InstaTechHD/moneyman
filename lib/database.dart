@@ -5,6 +5,7 @@ import 'package:moor_ffi/moor_ffi.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
+import 'daos/accounts.dart';
 import 'models/accounts.dart';
 
 part 'database.g.dart';
@@ -17,7 +18,7 @@ LazyDatabase _openConnection() {
   });
 }
 
-@UseMoor(tables: [Accounts])
+@UseMoor(tables: [Accounts], daos: [AccountDao])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
