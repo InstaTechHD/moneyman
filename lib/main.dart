@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:moneyman/routes.dart';
 import 'package:provider/provider.dart';
 
 import 'database.dart';
+import 'repositories/accounts.dart';
+import 'routes.dart';
+import 'services/accounts.dart';
 
 void main() => runApp(App());
 
 class App extends StatelessWidget {
+  final _db = AppDatabase();
+
   @override
   Widget build(BuildContext context) {
-    return Provider(
-        create: (_) => AppDatabase(),
+    return MultiProvider(
+        providers: [
+          Provider<AccountsService>(
+              create: (_) =>
+                  AccountsService(AccountsLocalRepository(_db.accountDao)))
+        ],
         child: MaterialApp(
           title: 'MoneyMan',
           initialRoute: '/',
