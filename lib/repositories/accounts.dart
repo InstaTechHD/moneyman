@@ -7,7 +7,7 @@ abstract class AccountsRepository extends Repository<Account, int> {}
 class AccountsLocalRepository implements AccountsRepository {
   final AccountDao dao;
 
-  AccountsLocalRepository(this.dao);
+  AccountsLocalRepository(AppDatabase db) : dao = AccountDao(db);
 
   @override
   Future<int> create(Account account) => dao.insertAccount(account);

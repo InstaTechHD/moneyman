@@ -14,15 +14,16 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-        providers: [
-          Provider<AccountsService>(
-              create: (_) =>
-                  AccountsService(AccountsLocalRepository(_db.accountDao)))
-        ],
-        child: MaterialApp(
-          title: 'MoneyMan',
-          initialRoute: '/',
-          routes: routes,
-        ));
+      providers: [
+        Provider<AccountsService>(
+          create: (_) => AccountsService(AccountsLocalRepository(_db)),
+        )
+      ],
+      child: MaterialApp(
+        title: 'MoneyMan',
+        initialRoute: '/',
+        routes: routes,
+      ),
+    );
   }
 }
