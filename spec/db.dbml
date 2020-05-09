@@ -22,6 +22,7 @@ Table categories {
   id int [pk]
   type_id int [not null]
   name text [not null, unique]
+  parent_id int [ref: > categories.id]
 }
 
 Table transactions {
@@ -36,7 +37,7 @@ Table transactions {
   notes text
   // If it's true it indicates that there are children
   split boolean [not null]
-  parent_transaction_id int [ref: > transactions.id]
+  parent_id int [ref: > transactions.id]
 }
 
 Table transfers {
