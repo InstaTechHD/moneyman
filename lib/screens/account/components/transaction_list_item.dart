@@ -13,7 +13,7 @@ class TransactionListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -25,13 +25,14 @@ class TransactionListItem extends StatelessWidget {
                 transaction.categoryId.toString(),
                 style: const TextStyle(fontSize: 12),
               ),
-              Text(
-                transaction.notes,
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontStyle: FontStyle.italic,
+              if (transaction.notes != null)
+                Text(
+                  transaction.notes,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontStyle: FontStyle.italic,
+                  ),
                 ),
-              ),
             ],
           ),
           Column(
