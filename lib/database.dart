@@ -4,6 +4,7 @@ import 'package:moor/moor.dart';
 import 'package:moor_ffi/moor_ffi.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+import 'package:xdg_directories/xdg_directories.dart' as xdg;
 
 import 'models/accounts.dart';
 import 'models/categories.dart';
@@ -15,7 +16,15 @@ part 'database.g.dart';
 
 LazyDatabase _openConnection() {
   return LazyDatabase(() async {
-    final dbFolder = await getApplicationDocumentsDirectory();
+    Directory dbFolder;
+    if (Platform.isLinux) {
+      // Since path_provider doesn't currently support Linux, figure it out here
+      dbFolder = Directory(p.join(xdg.dataHome.path, 'moneyman'));
+      if (!await dbFolder.exists()) await dbFolder.create();
+    } else {
+      dbFolder = await getApplicationDocumentsDirectory();
+    }
+
     final file = File(p.join(dbFolder.path, 'db.sqlite'));
     return VmDatabase(file, logStatements: true);
   });
