@@ -2,7 +2,9 @@ import '../daos/accounts.dart';
 import '../database.dart';
 import 'repository.dart';
 
-abstract class AccountsRepository extends Repository<Account, int> {}
+abstract class AccountsRepository extends Repository<Account, int> {
+  Future<List<Account>> getAll();
+}
 
 class AccountsLocalRepository implements AccountsRepository {
   final AccountDao dao;

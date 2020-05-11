@@ -3,8 +3,10 @@ import 'package:provider/provider.dart';
 
 import 'database.dart';
 import 'repositories/accounts.dart';
+import 'repositories/transactions.dart';
 import 'routes.dart';
 import 'services/accounts.dart';
+import 'services/transactions.dart';
 
 void main() => runApp(App());
 
@@ -17,7 +19,10 @@ class App extends StatelessWidget {
       providers: [
         Provider<AccountsService>(
           create: (_) => AccountsService(AccountsLocalRepository(_db)),
-        )
+        ),
+        Provider<TransactionsService>(
+          create: (_) => TransactionsService(TransactionsLocalRepository(_db)),
+        ),
       ],
       child: MaterialApp(
         title: 'MoneyMan',

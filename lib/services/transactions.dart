@@ -8,6 +8,6 @@ class TransactionsService {
   TransactionsService(this.repo);
 
   Future<TXN> getTransaction(int id) => repo.get(id);
-  Future<List<TXN>> getTransactions() => repo.getAll();
+  Future<List<TXN>> getTransactions(Account account) => repo.getAll(account.id);
   Future addTransaction(TXN transaction) => repo.create(transaction);
 }
