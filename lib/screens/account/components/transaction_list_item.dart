@@ -20,9 +20,9 @@ class TransactionListItem extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(transaction.payeeID.toString()),
+              Text(transaction.payeeId.toString()),
               Text(
-                transaction.categoryID.toString(),
+                transaction.categoryId.toString(),
                 style: const TextStyle(fontSize: 12),
               ),
               Text(
