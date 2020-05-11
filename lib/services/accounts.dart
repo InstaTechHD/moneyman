@@ -1,6 +1,5 @@
-import 'package:moneyman/repositories/accounts.dart';
-
 import '../database.dart';
+import '../repositories/accounts.dart';
 
 class AccountsService {
   final AccountsRepository repo;
