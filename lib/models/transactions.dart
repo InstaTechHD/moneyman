@@ -1,5 +1,6 @@
 import 'package:moor/moor.dart';
 
+@DataClassName('TXN')
 class Transactions extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get accountID =>

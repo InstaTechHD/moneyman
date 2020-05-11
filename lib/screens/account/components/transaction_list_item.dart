@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../database.dart';
 
 class TransactionListItem extends StatelessWidget {
-  final Transaction transaction;
+  final TXN transaction;
 
   const TransactionListItem({
     Key key,
