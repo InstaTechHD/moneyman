@@ -1,4 +1,4 @@
-import 'package:moor/moor.dart';
+part of '../database.dart';
 
 @DataClassName('Category')
 class Categories extends Table {

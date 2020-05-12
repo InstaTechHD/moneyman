@@ -1,7 +1,6 @@
 import 'package:moor/moor.dart';
 
 import '../database.dart';
-import '../models/transactions.dart';
 
 part 'transactions.g.dart';
 
@@ -10,7 +9,8 @@ class TransactionDao extends DatabaseAccessor<AppDatabase>
     with _$TransactionDaoMixin {
   TransactionDao(AppDatabase db) : super(db);
 
-  Future<List<TXN>> getAllTransactions(int accountId) => (select(transactions)..where((t) => t.accountId.equals(accountId))).get();
+  Future<List<TXN>> getAllTransactions(int accountId) =>
+      (select(transactions)..where((t) => t.accountId.equals(accountId))).get();
   Future<TXN> getTransaction(int id) =>
       (select(transactions)..where((t) => t.id.equals(id))).getSingle();
   Future<int> insertTransaction(TXN transaction) =>

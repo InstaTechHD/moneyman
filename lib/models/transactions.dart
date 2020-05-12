@@ -1,4 +1,4 @@
-import 'package:moor/moor.dart';
+part of '../database.dart';
 
 @DataClassName('TXN')
 class Transactions extends Table {

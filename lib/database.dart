@@ -6,13 +6,12 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:xdg_directories/xdg_directories.dart' as xdg;
 
-import 'models/accounts.dart';
-import 'models/categories.dart';
-import 'models/currencies.dart';
-import 'models/payees.dart';
-import 'models/transactions.dart';
-
 part 'database.g.dart';
+part 'models/accounts.dart';
+part 'models/categories.dart';
+part 'models/currencies.dart';
+part 'models/payees.dart';
+part 'models/transactions.dart';
 
 LazyDatabase _openConnection() {
   return LazyDatabase(() async {

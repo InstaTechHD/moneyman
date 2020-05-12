@@ -1,7 +1,6 @@
 import 'package:moor/moor.dart';
 
 import '../database.dart';
-import '../models/accounts.dart';
 
 part 'accounts.g.dart';
 

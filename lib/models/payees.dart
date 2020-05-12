@@ -1,4 +1,4 @@
-import 'package:moor/moor.dart';
+part of '../database.dart';
 
 class Payees extends Table {
   IntColumn get id => integer().autoIncrement()();

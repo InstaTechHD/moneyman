@@ -1,4 +1,4 @@
-import 'package:moor/moor.dart';
+part of '../database.dart';
 
 @DataClassName('Currency')
 class Currencies extends Table {
