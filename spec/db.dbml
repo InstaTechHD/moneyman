@@ -9,8 +9,9 @@ Table currencies {
   id int [pk]
   code text [not null]
   symbol text [not null]
-  multiplier int [not null]
+  divisor int [not null]
   symbol_before boolean [not null]
+  custom boolean [not null]
 }
 
 Table payees {

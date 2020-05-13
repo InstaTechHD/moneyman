@@ -61,22 +61,25 @@ class AppDatabase extends _$AppDatabase {
           id: 1,
           code: 'USD',
           symbol: '\$',
-          multiplier: 100,
+          divisor: 100,
           symbolBefore: true,
+          custom: false,
         ),
         Currency(
           id: 2,
           code: 'EUR',
           symbol: '€',
-          multiplier: 100,
+          divisor: 100,
           symbolBefore: true,
+          custom: false,
         ),
         Currency(
           id: 3,
           code: 'SEK',
           symbol: 'kr',
-          multiplier: 100,
+          divisor: 100,
           symbolBefore: false,
+          custom: false,
         )
       ]);
     });

@@ -7,6 +7,7 @@ class Currencies extends Table {
   TextColumn get code =>
       text().customConstraint('NOT NULL UNIQUE').withLength(min: 3, max: 3)();
   TextColumn get symbol => text()();
-  IntColumn get multiplier => integer()();
+  IntColumn get divisor => integer()();
   BoolColumn get symbolBefore => boolean()();
+  BoolColumn get custom => boolean()();
 }
