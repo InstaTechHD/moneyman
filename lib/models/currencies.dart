@@ -14,6 +14,21 @@ class Currencies extends Table {
 
 extension ModelMethods on Currency {
   String formatAmount(int amount) {
-    return NumberFormat.simpleCurrency(name: code).format(amount / divisor);
+    if (!custom) {
+      return NumberFormat.simpleCurrency(name: code).format(amount / divisor);
+    }
+
+    String customPattern = '#,##0.00';
+
+    if (symbolBefore) {
+      customPattern = '\u00A4$customPattern';
+    } else {
+      customPattern += '\u00A0\u00A4';
+    }
+
+    return NumberFormat.currency(
+      symbol: symbol,
+      customPattern: customPattern,
+    ).format(amount / divisor);
   }
 }
