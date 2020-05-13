@@ -20,7 +20,6 @@ class AccountListItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Flexible(
-            flex: 1,
             child: Text(
               account.name,
               overflow: TextOverflow.ellipsis,
