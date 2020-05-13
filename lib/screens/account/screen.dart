@@ -70,12 +70,20 @@ class AccountScreen extends HookWidget {
     Currency currency,
     List<TXN> transactions,
   ) {
+    final children = <Widget>[];
+    for (var i = 0; i < transactions.length; i++) {
+      children.add(TransactionListItem(
+        transaction: transactions[i],
+        currency: currency,
+      ));
+
+      // Don't add divider after the last item
+      if (i != transactions.length - 1) children.add(const Divider(height: 1));
+    }
+
     return Padding(
       padding: EdgeInsets.only(top: headerHeight),
-      child: Column(children: [
-        for (var t in transactions)
-          TransactionListItem(transaction: t, currency: currency)
-      ]),
+      child: Column(children: children),
     );
   }
 
