@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:sticky_infinite_list/sticky_infinite_list.dart';
 
 import '../../database.dart';
+import '../../services/currencies.dart';
 import '../../services/transactions.dart';
 import 'components/transaction_list_item.dart';
 
@@ -19,10 +20,16 @@ class AccountScreen extends HookWidget {
     final transactions = useFuture(useMemoized(
       () => Provider.of<TransactionsService>(context).getTransactions(account),
     ));
+    final currency = useFuture(useMemoized(
+      () => Provider.of<CurrenciesService>(context)
+          .getCurrency(account.currencyId),
+    ));
 
     Widget body;
     if (transactions.connectionState != ConnectionState.done ||
-        transactions.hasError) {
+        transactions.hasError ||
+        currency.connectionState != ConnectionState.done ||
+        currency.hasError) {
       body = Container();
     } else {
       final transactionsByDate = groupBy(transactions.data, (TXN t) => t.date);
@@ -41,6 +48,7 @@ class AccountScreen extends HookWidget {
             contentBuilder: (context) => _buildTransactionsList(
               context,
               dateHeaderHeight,
+              currency.data,
               transactionsByDate[dates[index]],
             ),
           );
@@ -59,12 +67,14 @@ class AccountScreen extends HookWidget {
   Widget _buildTransactionsList(
     BuildContext context,
     double headerHeight,
+    Currency currency,
     List<TXN> transactions,
   ) {
     return Padding(
       padding: EdgeInsets.only(top: headerHeight),
       child: Column(children: [
-        for (var t in transactions) TransactionListItem(transaction: t)
+        for (var t in transactions)
+          TransactionListItem(transaction: t, currency: currency)
       ]),
     );
   }
@@ -85,7 +95,7 @@ class AccountScreen extends HookWidget {
       ),
       child: Text(
         DateFormat('EEEE, MMMM d, y').format(date).toUpperCase(),
-        style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+        style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
       ),
     );
   }

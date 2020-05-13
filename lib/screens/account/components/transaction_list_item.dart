@@ -4,10 +4,12 @@ import '../../../database.dart';
 
 class TransactionListItem extends StatelessWidget {
   final TXN transaction;
+  final Currency currency;
 
   const TransactionListItem({
     Key key,
     @required this.transaction,
+    @required this.currency,
   }) : super(key: key);
 
   @override
@@ -39,7 +41,7 @@ class TransactionListItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(transaction.amount.toString()),
+              Text(currency.formatAmount(transaction.amount)),
               const Text(
                 '[run_balance]',
                 style: TextStyle(fontSize: 12),

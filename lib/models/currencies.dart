@@ -11,3 +11,9 @@ class Currencies extends Table {
   BoolColumn get symbolBefore => boolean()();
   BoolColumn get custom => boolean()();
 }
+
+extension ModelMethods on Currency {
+  String formatAmount(int amount) {
+    return NumberFormat.simpleCurrency(name: code).format(amount / divisor);
+  }
+}
