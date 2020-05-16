@@ -32,7 +32,8 @@ class AccountScreen extends HookWidget {
         currency.hasError) {
       body = Container();
     } else {
-      final transactionsByDate = groupBy(transactions.data, (TXN t) => t.date);
+      final transactionsByDate =
+          groupBy(transactions.data, (TXNBundle t) => t.transaction.date);
       final dates = transactionsByDate.keys.toList()..sort();
 
       body = InfiniteList(
@@ -68,13 +69,14 @@ class AccountScreen extends HookWidget {
     BuildContext context,
     double headerHeight,
     Currency currency,
-    List<TXN> transactions,
+    List<TXNBundle> transactions,
   ) {
     final children = <Widget>[];
     for (var i = 0; i < transactions.length; i++) {
       children.add(TransactionListItem(
-        transaction: transactions[i],
+        txnBundle: transactions[i],
         currency: currency,
+        runningBalance: 10000,
       ));
 
       // Don't add divider after the last item

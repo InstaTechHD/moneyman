@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 import '../../../database.dart';
 
 class TransactionListItem extends StatelessWidget {
-  final TXN transaction;
+  final TXNBundle txnBundle;
   final Currency currency;
+  final int runningBalance;
 
   const TransactionListItem({
     Key key,
-    @required this.transaction,
+    @required this.txnBundle,
     @required this.currency,
+    @required this.runningBalance,
   }) : super(key: key);
 
   @override
@@ -22,14 +24,14 @@ class TransactionListItem extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(transaction.payeeId.toString()),
+              Text(txnBundle.payee.name),
               Text(
-                transaction.categoryId.toString(),
+                txnBundle.category.name,
                 style: const TextStyle(fontSize: 12),
               ),
-              if (transaction.notes != null)
+              if (txnBundle.transaction.notes != null)
                 Text(
-                  transaction.notes,
+                  txnBundle.transaction.notes,
                   style: const TextStyle(
                     fontSize: 12,
                     fontStyle: FontStyle.italic,
@@ -41,10 +43,10 @@ class TransactionListItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(currency.formatAmount(transaction.amount)),
-              const Text(
-                '[run_balance]',
-                style: TextStyle(fontSize: 12),
+              Text(currency.formatAmount(txnBundle.transaction.amount)),
+              Text(
+                currency.formatAmount(runningBalance),
+                style: const TextStyle(fontSize: 12),
               ),
             ],
           ),

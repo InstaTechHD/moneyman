@@ -19,3 +19,11 @@ class Transactions extends Table {
       .nullable()
       .customConstraint('NULL REFERENCES transactions(id)')();
 }
+
+class TXNBundle {
+  TXN transaction;
+  Category category;
+  Payee payee;
+
+  TXNBundle({@required this.transaction, this.category, this.payee});
+}
