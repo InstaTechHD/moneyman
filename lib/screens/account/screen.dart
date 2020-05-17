@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:sticky_infinite_list/sticky_infinite_list.dart';
 
 import '../../database.dart';
+import '../../services/accounts.dart';
 import '../../services/currencies.dart';
 import '../../services/transactions.dart';
 import 'components/transaction_list_item.dart';
@@ -24,33 +25,57 @@ class AccountScreen extends HookWidget {
       () => Provider.of<CurrenciesService>(context)
           .getCurrency(account.currencyId),
     ));
+    final accountBalance = useFuture(useMemoized(
+      () => Provider.of<AccountsService>(context).getBalance(account),
+    ));
 
     Widget body;
     if (transactions.connectionState != ConnectionState.done ||
         transactions.hasError ||
         currency.connectionState != ConnectionState.done ||
-        currency.hasError) {
+        currency.hasError ||
+        accountBalance.connectionState != ConnectionState.done ||
+        accountBalance.hasError) {
       body = Container();
     } else {
-      final transactionsByDate =
-          groupBy(transactions.data, (TXNBundle t) => t.transaction.date);
-      final dates = transactionsByDate.keys.toList()..sort();
+      // Wrap each transaction with the running balance
+      int runningBalance = accountBalance.data;
 
+      final txnsWithRB = transactions.data.map((TXNBundle tb) {
+        final txn = TXNBundleWithRB(tb, runningBalance);
+        runningBalance -= tb.transaction.amount;
+        return txn;
+      });
+
+      final transactionsByDate = groupBy(
+        txnsWithRB,
+        (TXNBundleWithRB t) => t.txnBundle.transaction.date,
+      );
+
+      final dates = transactionsByDate.keys.toList();
+
+      // This list will be in reverse mode,
+      // i.e. start at the bottom and scroll up
       body = InfiniteList(
-        maxChildCount: dates.length,
+        anchor: 1,
+        direction: InfiniteListDirection.multi,
+        minChildCount: dates.length * -1,
+        maxChildCount: 0,
         builder: (BuildContext context, int index) {
+          final date = dates[(index * -1) - 1];
+
           return InfiniteListItem(
             minOffsetProvider: (StickyState<int> state) => dateHeaderHeight,
             headerBuilder: (context) => _buildDateHeader(
               context,
               dateHeaderHeight,
-              dates[index],
+              date,
             ),
             contentBuilder: (context) => _buildTransactionsList(
               context,
               dateHeaderHeight,
               currency.data,
-              transactionsByDate[dates[index]],
+              transactionsByDate[date],
             ),
           );
         },
@@ -69,18 +94,18 @@ class AccountScreen extends HookWidget {
     BuildContext context,
     double headerHeight,
     Currency currency,
-    List<TXNBundle> transactions,
+    List<TXNBundleWithRB> transactions,
   ) {
     final children = <Widget>[];
-    for (var i = 0; i < transactions.length; i++) {
+    for (var i = transactions.length - 1; i >= 0; i--) {
       children.add(TransactionListItem(
-        txnBundle: transactions[i],
+        txnBundle: transactions[i].txnBundle,
         currency: currency,
-        runningBalance: 10000,
+        runningBalance: transactions[i].runningBalance,
       ));
 
       // Don't add divider after the last item
-      if (i != transactions.length - 1) children.add(const Divider(height: 1));
+      if (i != 0) children.add(const Divider(height: 1));
     }
 
     return Padding(
@@ -109,4 +134,11 @@ class AccountScreen extends HookWidget {
       ),
     );
   }
+}
+
+class TXNBundleWithRB {
+  TXNBundle txnBundle;
+  int runningBalance;
+
+  TXNBundleWithRB(this.txnBundle, this.runningBalance);
 }

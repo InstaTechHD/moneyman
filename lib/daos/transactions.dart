@@ -11,7 +11,11 @@ class TransactionDao extends DatabaseAccessor<AppDatabase>
 
   Future<List<TXNBundle>> getAllTransactions(int accountId) async {
     dynamic expr = select(transactions)
-      ..where((t) => t.accountId.equals(accountId));
+      ..where((t) => t.accountId.equals(accountId))
+      ..orderBy([
+        (t) => OrderingTerm(expression: t.date, mode: OrderingMode.desc),
+        (t) => OrderingTerm(expression: t.id, mode: OrderingMode.desc),
+      ]);
 
     expr = expr.join([
       leftOuterJoin(
