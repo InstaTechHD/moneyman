@@ -6,4 +6,5 @@ class Accounts extends Table {
   IntColumn get typeId => integer()();
   IntColumn get currencyId =>
       integer().customConstraint('NOT NULL REFERENCES currencies(id)')();
+  IntColumn get startingBalance => integer().withDefault(const Constant(0))();
 }

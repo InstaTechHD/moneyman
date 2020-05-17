@@ -12,13 +12,23 @@ class AccountDao extends DatabaseAccessor<AppDatabase> with _$AccountDaoMixin {
   Future<Account> getAccount(int id) =>
       (select(accounts)..where((a) => a.id.equals(id))).getSingle();
 
-  Future<int> getBalance(Account account) {
-    final amountSum = transactions.amount.sum();
-    final query = selectOnly(transactions)
-      ..addColumns([amountSum])
-      ..where(transactions.accountId.equals(account.id));
+  Future<int> getBalance(Account account) async {
+    final startingBalance = (selectOnly(accounts)
+          ..addColumns([accounts.startingBalance])
+          ..where(accounts.id.equals(account.id)))
+        .map((row) => row.read(accounts.startingBalance))
+        .getSingle();
 
-    return query.map((row) => row.read(amountSum)).getSingle();
+    final amountSum = transactions.amount.sum();
+    final sum = (selectOnly(transactions)
+          ..addColumns([amountSum])
+          ..where(transactions.accountId.equals(account.id)))
+        .map((row) => row.read(amountSum))
+        .getSingle();
+
+    return (await Future.wait([startingBalance, sum])).reduce(
+      (a, b) => a + (b ?? 0),
+    );
   }
 
   Future<int> insertAccount(Account account) => into(accounts).insert(account);

@@ -3,6 +3,7 @@ Table accounts {
   name text [not null]
   type_id int [not null]
   currency_id int [ref: > currencies.id, not null]
+  starting_balance int [not null, default: 0]
 }
 
 Table currencies {
