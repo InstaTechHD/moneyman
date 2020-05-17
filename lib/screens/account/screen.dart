@@ -9,6 +9,7 @@ import '../../database.dart';
 import '../../services/accounts.dart';
 import '../../services/currencies.dart';
 import '../../services/transactions.dart';
+import 'components/account_balance.dart';
 import 'components/transaction_list_item.dart';
 
 class AccountScreen extends HookWidget {
@@ -54,32 +55,40 @@ class AccountScreen extends HookWidget {
 
       final dates = transactionsByDate.keys.toList();
 
-      // This list will be in reverse mode,
-      // i.e. start at the bottom and scroll up
-      body = InfiniteList(
-        anchor: 1,
-        direction: InfiniteListDirection.multi,
-        minChildCount: dates.length * -1,
-        maxChildCount: 0,
-        builder: (BuildContext context, int index) {
-          final date = dates[(index * -1) - 1];
+      body = Column(children: [
+        // This list will be in reverse mode,
+        // i.e. start at the bottom and scroll up
+        Flexible(
+          child: InfiniteList(
+            anchor: 1,
+            direction: InfiniteListDirection.multi,
+            minChildCount: dates.length * -1,
+            maxChildCount: 0,
+            builder: (BuildContext context, int index) {
+              final date = dates[(index * -1) - 1];
 
-          return InfiniteListItem(
-            minOffsetProvider: (StickyState<int> state) => dateHeaderHeight,
-            headerBuilder: (context) => _buildDateHeader(
-              context,
-              dateHeaderHeight,
-              date,
-            ),
-            contentBuilder: (context) => _buildTransactionsList(
-              context,
-              dateHeaderHeight,
-              currency.data,
-              transactionsByDate[date],
-            ),
-          );
-        },
-      );
+              return InfiniteListItem(
+                minOffsetProvider: (StickyState<int> state) => dateHeaderHeight,
+                headerBuilder: (context) => _buildDateHeader(
+                  context,
+                  dateHeaderHeight,
+                  date,
+                ),
+                contentBuilder: (context) => _buildTransactionsList(
+                  context,
+                  dateHeaderHeight,
+                  currency.data,
+                  transactionsByDate[date],
+                ),
+              );
+            },
+          ),
+        ),
+        AccountBalance(
+          accountBalance: accountBalance.data,
+          currency: currency.data,
+        ),
+      ]);
     }
 
     return Scaffold(
