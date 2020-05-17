@@ -10,4 +10,5 @@ class AccountsService {
   Future<Account> getAccount(int id) => repo.get(id);
   Future<List<Account>> getAccounts() => repo.getAll();
   Future addAccount(Account account) => repo.create(account);
+  Future<int> getBalance(Account account) => repo.getBalance(account);
 }
