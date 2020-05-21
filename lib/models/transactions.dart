@@ -21,9 +21,9 @@ class Transactions extends Table {
 }
 
 class TXNBundle {
-  TXN transaction;
-  Category category;
-  Payee payee;
+  final TXN transaction;
+  final Category category;
+  final Payee payee;
 
   TXNBundle({@required this.transaction, this.category, this.payee});
 }
