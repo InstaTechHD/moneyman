@@ -3,7 +3,7 @@ import '../database.dart';
 import 'repository.dart';
 
 abstract class AccountsRepository extends Repository<Account, int> {
-  Future<List<Account>> getAll();
+  Future<List<AccountBundle>> getAll();
   Future<int> getBalance(Account account);
 }
 
@@ -22,7 +22,7 @@ class AccountsLocalRepository implements AccountsRepository {
   Future<Account> get(int id) => dao.getAccount(id);
 
   @override
-  Future<List<Account>> getAll() => dao.getAllAccounts();
+  Future<List<AccountBundle>> getAll() => dao.getAllAccounts();
 
   @override
   Future<int> getBalance(Account account) => dao.getBalance(account);

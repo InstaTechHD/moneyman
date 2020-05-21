@@ -8,3 +8,15 @@ class Accounts extends Table {
       integer().customConstraint('NOT NULL REFERENCES currencies(id)')();
   IntColumn get startingBalance => integer().withDefault(const Constant(0))();
 }
+
+class AccountBundle {
+  final Account account;
+  final Currency currency;
+  final int balance;
+
+  AccountBundle({
+    @required this.account,
+    this.currency,
+    this.balance,
+  });
+}

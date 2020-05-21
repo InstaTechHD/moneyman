@@ -33,10 +33,17 @@ class AccountsScreen extends HookWidget {
     );
   }
 
-  Widget _buildAccountRow(BuildContext context, Account account) {
+  Widget _buildAccountRow(BuildContext context, AccountBundle ab) {
     return InkWell(
-      onTap: () => Navigator.pushNamed(context, '/account', arguments: account),
-      child: AccountListItem(account: account, balance: '\$ 1270.39'),
+      onTap: () => Navigator.pushNamed(
+        context,
+        '/account',
+        arguments: ab.account,
+      ),
+      child: AccountListItem(
+        account: ab.account,
+        balance: ab.currency.formatAmount(ab.balance),
+      ),
     );
   }
 }
