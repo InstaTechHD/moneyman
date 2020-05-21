@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:intl/intl.dart';
 import 'package:moor/moor.dart';
@@ -62,7 +63,7 @@ class AppDatabase extends _$AppDatabase {
           id: 1,
           code: 'USD',
           symbol: '\$',
-          divisor: 100,
+          numDecimals: 2,
           symbolBefore: true,
           custom: false,
         ),
@@ -70,7 +71,7 @@ class AppDatabase extends _$AppDatabase {
           id: 2,
           code: 'EUR',
           symbol: '€',
-          divisor: 100,
+          numDecimals: 2,
           symbolBefore: true,
           custom: false,
         ),
@@ -78,7 +79,7 @@ class AppDatabase extends _$AppDatabase {
           id: 3,
           code: 'SEK',
           symbol: 'kr',
-          divisor: 100,
+          numDecimals: 2,
           symbolBefore: false,
           custom: false,
         )
@@ -94,18 +95,21 @@ class AppDatabase extends _$AppDatabase {
           name: 'Main',
           typeId: 1,
           currencyId: 1,
+          startingBalance: 0,
         ),
         Account(
           id: 2,
           name: 'Savings',
           typeId: 1,
           currencyId: 2,
+          startingBalance: 0,
         ),
         Account(
           id: 3,
           name: 'Wallet',
           typeId: 1,
           currencyId: 3,
+          startingBalance: 0,
         )
       ]);
 

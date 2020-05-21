@@ -7,18 +7,17 @@ class Currencies extends Table {
   TextColumn get code =>
       text().customConstraint('NOT NULL UNIQUE').withLength(min: 3, max: 3)();
   TextColumn get symbol => text()();
-  IntColumn get divisor => integer()();
+  IntColumn get numDecimals => integer()();
   BoolColumn get symbolBefore => boolean()();
   BoolColumn get custom => boolean()();
 }
 
 extension ModelMethods on Currency {
-  String formatAmount(int amount) {
-    if (!custom) {
-      return NumberFormat.simpleCurrency(name: code).format(amount / divisor);
-    }
+  int amountDivisor() => pow(10, numDecimals).toInt();
 
-    String customPattern = '#,##0.00';
+  String formatAmount(int amount) {
+    String customPattern = '#,##0.';
+    customPattern += '0' * numDecimals;
 
     if (symbolBefore) {
       customPattern = '\u00A4$customPattern';
@@ -29,6 +28,6 @@ extension ModelMethods on Currency {
     return NumberFormat.currency(
       symbol: symbol,
       customPattern: customPattern,
-    ).format(amount / divisor);
+    ).format(amount / amountDivisor());
   }
 }
