@@ -15,34 +15,31 @@ import 'components/transaction_list_item.dart';
 class AccountScreen extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final dateHeaderHeight = 20.0 * MediaQuery.textScaleFactorOf(context);
-
     final Account account =
         ModalRoute.of(context).settings.arguments as Account;
-    final transactions = useFuture(useMemoized(
-      () => Provider.of<TransactionsService>(context).getTransactions(account),
-    ));
-    final currency = useFuture(useMemoized(
-      () => Provider.of<CurrenciesService>(context)
-          .getCurrency(account.currencyId),
-    ));
-    final accountBalance = useFuture(useMemoized(
-      () => Provider.of<AccountsService>(context).getBalance(account),
+
+    final fetches = useFuture(useMemoized(
+      () => Future.wait([
+        Provider.of<AccountsService>(context).getBalance(account),
+        Provider.of<CurrenciesService>(context).getCurrency(account.currencyId),
+        Provider.of<TransactionsService>(context).getTransactions(account),
+      ], eagerError: true),
     ));
 
     Widget body;
-    if (transactions.connectionState != ConnectionState.done ||
-        transactions.hasError ||
-        currency.connectionState != ConnectionState.done ||
-        currency.hasError ||
-        accountBalance.connectionState != ConnectionState.done ||
-        accountBalance.hasError) {
-      body = Container();
+    if (fetches.connectionState == ConnectionState.waiting) {
+      body = const Text('Loading...');
+    } else if (fetches.hasError) {
+      body = Text(fetches.error.toString());
     } else {
-      // Wrap each transaction with the running balance
-      int runningBalance = accountBalance.data;
+      final accountBalance = fetches.data[0] as int;
+      final currency = fetches.data[1] as Currency;
+      final transactions = fetches.data[2] as List<TXNBundle>;
 
-      final txnsWithRB = transactions.data.map((TXNBundle tb) {
+      // Wrap each transaction with the running balance
+      int runningBalance = accountBalance;
+
+      final txnsWithRB = transactions.map((TXNBundle tb) {
         final txn = TXNBundleWithRB(tb, runningBalance);
         runningBalance -= tb.transaction.amount;
         return txn;
@@ -53,42 +50,12 @@ class AccountScreen extends HookWidget {
         (TXNBundleWithRB t) => t.txnBundle.transaction.date,
       );
 
-      final dates = transactionsByDate.keys.toList();
-
-      body = Column(children: [
-        // This list will be in reverse mode,
-        // i.e. start at the bottom and scroll up
-        Flexible(
-          child: InfiniteList(
-            anchor: 1,
-            direction: InfiniteListDirection.multi,
-            minChildCount: dates.length * -1,
-            maxChildCount: 0,
-            builder: (BuildContext context, int index) {
-              final date = dates[(index * -1) - 1];
-
-              return InfiniteListItem(
-                minOffsetProvider: (StickyState<int> state) => dateHeaderHeight,
-                headerBuilder: (context) => _buildDateHeader(
-                  context,
-                  dateHeaderHeight,
-                  date,
-                ),
-                contentBuilder: (context) => _buildTransactionsList(
-                  context,
-                  dateHeaderHeight,
-                  currency.data,
-                  transactionsByDate[date],
-                ),
-              );
-            },
-          ),
-        ),
-        AccountBalance(
-          accountBalance: accountBalance.data,
-          currency: currency.data,
-        ),
-      ]);
+      body = _buildBody(
+        context,
+        currency,
+        accountBalance,
+        transactionsByDate,
+      );
     }
 
     return Scaffold(
@@ -97,6 +64,51 @@ class AccountScreen extends HookWidget {
       ),
       body: body,
     );
+  }
+
+  Widget _buildBody(
+    BuildContext ctx,
+    Currency currency,
+    int accountBalance,
+    Map<DateTime, List<TXNBundleWithRB>> transactionsByDate,
+  ) {
+    final dateHeaderHeight = 20.0 * MediaQuery.textScaleFactorOf(ctx);
+    final dates = transactionsByDate.keys.toList();
+
+    return Column(children: [
+      // This list will be in reverse mode,
+      // i.e. start at the bottom and scroll up
+      Flexible(
+        child: InfiniteList(
+          anchor: 1,
+          direction: InfiniteListDirection.multi,
+          minChildCount: dates.length * -1,
+          maxChildCount: 0,
+          builder: (BuildContext context, int index) {
+            final date = dates[(index * -1) - 1];
+
+            return InfiniteListItem(
+              minOffsetProvider: (StickyState<int> state) => dateHeaderHeight,
+              headerBuilder: (context) => _buildDateHeader(
+                context,
+                dateHeaderHeight,
+                date,
+              ),
+              contentBuilder: (context) => _buildTransactionsList(
+                context,
+                dateHeaderHeight,
+                currency,
+                transactionsByDate[date],
+              ),
+            );
+          },
+        ),
+      ),
+      AccountBalance(
+        accountBalance: accountBalance,
+        currency: currency,
+      ),
+    ]);
   }
 
   Widget _buildTransactionsList(

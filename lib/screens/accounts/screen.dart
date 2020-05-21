@@ -14,8 +14,10 @@ class AccountsScreen extends HookWidget {
     ));
 
     Widget body;
-    if (accounts.connectionState != ConnectionState.done || accounts.hasError) {
-      body = Container();
+    if (accounts.connectionState == ConnectionState.waiting) {
+      body = const Text('Loading...');
+    } else if (accounts.hasError) {
+      body = Text(accounts.error.toString());
     } else {
       body = ListView.builder(
         itemCount: accounts.data.length,
