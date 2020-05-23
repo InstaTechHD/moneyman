@@ -1,0 +1,40 @@
+{
+  "currencies": [
+    {
+      "id": 1,
+      "code": "USD",
+      "symbol": "$",
+      "numDecimals": 2,
+      "symbolBefore": true,
+      "custom": false
+    },
+    {
+      "id": 2,
+      "code": "EUR",
+      "symbol": "€",
+      "numDecimals": 2,
+      "symbolBefore": true,
+      "custom": false
+    },
+    {
+      "id": 3,
+      "code": "SEK",
+      "symbol": "kr",
+      "numDecimals": 2,
+      "symbolBefore": false,
+      "custom": false
+    }
+  ],
+  "categories": [
+    {
+      "id": 1,
+      "typeId": 1,
+      "name": "Food"
+    },
+    {
+      "id": 2,
+      "typeId": 1,
+      "name": "Wages"
+    }
+  ]
+}

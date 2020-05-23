@@ -1,0 +1,94 @@
+{
+  "accounts": [
+    {
+      "id": 1,
+      "name": "Main",
+      "typeId": 1,
+      "currencyId": 1,
+      "startingBalance": 15000
+    },
+    {
+      "id": 2,
+      "name": "Savings",
+      "typeId": 1,
+      "currencyId": 2,
+      "startingBalance": 0
+    },
+    {
+      "id": 3,
+      "name": "Wallet",
+      "typeId": 1,
+      "currencyId": 3,
+      "startingBalance": 1000
+    }
+  ],
+  "payees": [
+    {
+      "id": 1,
+      "name": "Grocery Store"
+    },
+    {
+      "id": 2,
+      "name": "Employer"
+    }
+  ],
+  "transactions": [
+    {
+      "accountId": 1,
+      "typeId": 1,
+      "date": 1583298000,
+      "statusId": 1,
+      "payeeId": 2,
+      "categoryId": 2,
+      "amount": 3750,
+      "notes": "Overtime work"
+    },
+    {
+      "accountId": 1,
+      "typeId": 1,
+      "date": 1583298000,
+      "statusId": 1,
+      "payeeId": 1,
+      "categoryId": 1,
+      "amount": -2493,
+      "notes": "Vegetables and chicken"
+    },
+    {
+      "accountId": 1,
+      "typeId": 1,
+      "date": 1584504000,
+      "statusId": 1,
+      "payeeId": 2,
+      "categoryId": 2,
+      "amount": 50900
+    },
+    {
+      "accountId": 1,
+      "typeId": 1,
+      "date": 1585800000,
+      "statusId": 1,
+      "payeeId": 1,
+      "categoryId": 1,
+      "amount": -5902
+    },
+    {
+      "accountId": 1,
+      "typeId": 1,
+      "date": 1585800000,
+      "statusId": 1,
+      "payeeId": 1,
+      "categoryId": 1,
+      "amount": -902,
+      "notes": "Weekend snacks"
+    },
+    {
+      "accountId": 1,
+      "typeId": 1,
+      "date": 1586404800,
+      "statusId": 1,
+      "payeeId": 1,
+      "categoryId": 1,
+      "amount": -1922
+    }
+  ]
+}

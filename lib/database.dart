@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:moor/moor.dart';
 import 'package:moor_ffi/moor_ffi.dart';
@@ -52,137 +54,47 @@ class AppDatabase extends _$AppDatabase {
         onCreate: (details) async {
           await details.createAll();
           await _insertInitialData();
-          await _insertDummyData();
+          await _insertDemoData();
         },
       );
 
   Future _insertInitialData() async {
+    final initialData = json.decode(
+      await rootBundle.loadString('assets/data/initial.json'),
+    );
+    final initialCurrencies = initialData['currencies']
+        .map<Currency>((c) => Currency.fromJson(c as Map<String, dynamic>))
+        .toList() as List<Insertable<Currency>>;
+    final initialCategories = initialData['categories']
+        .map<Category>((c) => Category.fromJson(c as Map<String, dynamic>))
+        .toList() as List<Insertable<Category>>;
+
     await batch((batch) {
-      batch.insertAll(currencies, [
-        Currency(
-          id: 1,
-          code: 'USD',
-          symbol: '\$',
-          numDecimals: 2,
-          symbolBefore: true,
-          custom: false,
-        ),
-        Currency(
-          id: 2,
-          code: 'EUR',
-          symbol: '€',
-          numDecimals: 2,
-          symbolBefore: true,
-          custom: false,
-        ),
-        Currency(
-          id: 3,
-          code: 'SEK',
-          symbol: 'kr',
-          numDecimals: 2,
-          symbolBefore: false,
-          custom: false,
-        )
-      ]);
+      batch.insertAll(currencies, initialCurrencies);
+      batch.insertAll(categories, initialCategories);
     });
   }
 
-  Future _insertDummyData() async {
+  Future _insertDemoData() async {
+    final demoData = json.decode(
+      await rootBundle.loadString('assets/data/demo.json'),
+    );
+    final demoAccounts = demoData['accounts']
+        .map<Account>((c) => Account.fromJson(c as Map<String, dynamic>))
+        .toList() as List<Insertable<Account>>;
+
+    final demoPayees = demoData['payees']
+        .map<Payee>((c) => Payee.fromJson(c as Map<String, dynamic>))
+        .toList() as List<Insertable<Payee>>;
+
+    final demoTransactions = demoData['transactions']
+        .map<TXN>((c) => TXN.fromJson(c as Map<String, dynamic>))
+        .toList() as List<Insertable<TXN>>;
+
     await batch((batch) {
-      batch.insertAll(accounts, [
-        Account(
-          id: 1,
-          name: 'Main',
-          typeId: 1,
-          currencyId: 1,
-          startingBalance: 0,
-        ),
-        Account(
-          id: 2,
-          name: 'Savings',
-          typeId: 1,
-          currencyId: 2,
-          startingBalance: 0,
-        ),
-        Account(
-          id: 3,
-          name: 'Wallet',
-          typeId: 1,
-          currencyId: 3,
-          startingBalance: 0,
-        )
-      ]);
-
-      batch.insertAll(payees, [
-        Payee(id: 1, name: 'Grocery Store'),
-        Payee(id: 2, name: 'Employer'),
-      ]);
-
-      batch.insertAll(categories, [
-        Category(id: 1, typeId: 1, name: 'Food'),
-        Category(id: 2, typeId: 1, name: 'Wages'),
-      ]);
-
-      // Main account
-      batch.insertAll(transactions, [
-        TransactionsCompanion.insert(
-          accountId: 1,
-          typeId: 1,
-          date: DateTime(2020, 3, 4),
-          statusId: 1,
-          payeeId: const Value(2),
-          categoryId: 2,
-          amount: 3750,
-          notes: const Value('Overtime work'),
-        ),
-        TransactionsCompanion.insert(
-          accountId: 1,
-          typeId: 1,
-          date: DateTime(2020, 3, 4),
-          statusId: 1,
-          payeeId: const Value(1),
-          categoryId: 1,
-          amount: -2493,
-          notes: const Value('Vegetables and chicken'),
-        ),
-        TransactionsCompanion.insert(
-          accountId: 1,
-          typeId: 1,
-          date: DateTime(2020, 3, 18),
-          statusId: 1,
-          payeeId: const Value(2),
-          categoryId: 2,
-          amount: 50900,
-        ),
-        TransactionsCompanion.insert(
-          accountId: 1,
-          typeId: 1,
-          date: DateTime(2020, 4, 2),
-          statusId: 1,
-          payeeId: const Value(1),
-          categoryId: 1,
-          amount: -5902,
-        ),
-        TransactionsCompanion.insert(
-          accountId: 1,
-          typeId: 1,
-          date: DateTime(2020, 4, 2),
-          statusId: 1,
-          payeeId: const Value(1),
-          categoryId: 1,
-          amount: -902,
-          notes: const Value('Weekend snacks'),
-        ),
-        TransactionsCompanion.insert(
-          accountId: 1,
-          typeId: 1,
-          date: DateTime(2020, 4, 9),
-          statusId: 1,
-          payeeId: const Value(1),
-          categoryId: 1,
-          amount: -1922,
-        ),
-      ]);
+      batch.insertAll(accounts, demoAccounts);
+      batch.insertAll(payees, demoPayees);
+      batch.insertAll(transactions, demoTransactions);
     });
   }
 }
