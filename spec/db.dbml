@@ -1,7 +1,7 @@
 Table accounts {
   id int [pk, increment]
   name text [not null]
-  type_id int [not null]
+  type int [not null]
   currency_id int [ref: > currencies.id, not null]
   starting_balance int [not null, default: 0]
 }
@@ -10,7 +10,7 @@ Table currencies {
   id int [pk]
   code text [not null]
   symbol text [not null]
-  divisor int [not null]
+  decimals int [not null]
   symbol_before boolean [not null]
   custom boolean [not null]
 }
@@ -22,7 +22,7 @@ Table payees {
 
 Table categories {
   id int [pk]
-  type_id int [not null]
+  type int [not null]
   name text [not null, unique]
   parent_id int [ref: > categories.id]
 }
@@ -30,15 +30,15 @@ Table categories {
 Table transactions {
   id uuid [pk]
   account_id int [ref: > accounts.id, not null]
-  type_id int [not null]
   date date [not null]
-  status_id int [not null]
+  transfer boolean [not null, default: false]
+  status int [not null]
   payee_id int [ref: > payees.id]
   category_id int [ref: > categories.id]
   amount bigint [not null]
   notes text
   // If it's true it indicates that there are children
-  split boolean [not null]
+  split boolean [not null, default: false]
   parent_id int [ref: > transactions.id]
 }
 
@@ -50,7 +50,7 @@ Table transfers {
 Table recurring_transactions {
   id int [pk]
   account_id int [ref: > accounts.id, not null]
-  type_id int [not null]
+  type int [not null]
   payee_id int [ref: > payees.id]
   start_date date [not null]
   end_date date
@@ -66,6 +66,6 @@ Table recurring_transactions {
 Table budget_items {
   id int [pk]
   category_id int [ref: - categories.id, not null]
-  interval_id int [not null]
+  interval int [not null]
   amount json [note: 'Can hold either a single value or a map of values']
 }

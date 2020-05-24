@@ -5,9 +5,9 @@ class Transactions extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get accountId =>
       integer().customConstraint('NOT NULL REFERENCES accounts(id)')();
-  IntColumn get typeId => integer()();
   DateTimeColumn get date => dateTime()();
-  IntColumn get statusId => integer()();
+  BoolColumn get transfer => boolean().withDefault(const Constant(false))();
+  IntColumn get status => intEnum<TransactionStatus>()();
   IntColumn get payeeId =>
       integer().nullable().customConstraint('NULL REFERENCES payee(id)')();
   IntColumn get categoryId =>
@@ -26,4 +26,27 @@ class TXNBundle {
   final Payee payee;
 
   TXNBundle({@required this.transaction, this.category, this.payee});
+}
+
+enum TransactionStatus {
+  unreconciled,
+  cleared,
+  reconciled,
+}
+
+extension TransactionStatusValues on TransactionStatus {
+  static String _value(TransactionStatus ts) {
+    switch (ts) {
+      case TransactionStatus.unreconciled:
+        return 'Unreconciled';
+      case TransactionStatus.cleared:
+        return 'Cleared';
+      case TransactionStatus.reconciled:
+        return 'Reconciled';
+    }
+
+    return '';
+  }
+
+  String get value => _value(this);
 }
