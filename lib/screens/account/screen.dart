@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:sticky_infinite_list/sticky_infinite_list.dart';
 
 import '../../database.dart';
+import '../../hooks/memoized_future.dart';
 import '../../services/accounts.dart';
 import '../../services/currencies.dart';
 import '../../services/transactions.dart';
@@ -18,23 +19,23 @@ class AccountScreen extends HookWidget {
     final Account account =
         ModalRoute.of(context).settings.arguments as Account;
 
-    final fetches = useFuture(useMemoized(
+    final fetches = useMemoizedFuture(
       () => Future.wait([
         Provider.of<AccountsService>(context).getBalance(account),
         Provider.of<CurrenciesService>(context).getCurrency(account.currencyId),
         Provider.of<TransactionsService>(context).getTransactions(account),
       ], eagerError: true),
-    ));
+    );
 
     Widget body;
-    if (fetches.connectionState == ConnectionState.waiting) {
+    if (fetches.snapshot.connectionState == ConnectionState.waiting) {
       body = const Text('Loading...');
-    } else if (fetches.hasError) {
-      body = Text(fetches.error.toString());
+    } else if (fetches.snapshot.hasError) {
+      body = Text(fetches.snapshot.error.toString());
     } else {
-      final accountBalance = fetches.data[0] as int;
-      final currency = fetches.data[1] as Currency;
-      final transactions = fetches.data[2] as List<TXNBundle>;
+      final accountBalance = fetches.snapshot.data[0] as int;
+      final currency = fetches.snapshot.data[1] as Currency;
+      final transactions = fetches.snapshot.data[2] as List<TXNBundle>;
 
       // Wrap each transaction with the running balance
       int runningBalance = accountBalance;
