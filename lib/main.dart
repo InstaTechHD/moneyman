@@ -33,6 +33,7 @@ class App extends StatelessWidget {
         title: 'MoneyMan',
         initialRoute: '/',
         routes: routes,
+        debugShowCheckedModeBanner: false,
       ),
     );
   }
