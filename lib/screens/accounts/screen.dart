@@ -36,9 +36,15 @@ class AccountsScreen extends HookWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Accounts'),
-      ),
+      appBar: AppBar(title: const Text('Accounts'), actions: [
+        IconButton(
+          icon: const Icon(Icons.add),
+          onPressed: () async {
+            await Navigator.pushNamed(context, '/accounts/add');
+            fetch.refresh();
+          },
+        ),
+      ]),
       body: body,
     );
   }
