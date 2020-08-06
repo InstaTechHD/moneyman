@@ -83,8 +83,8 @@ class AccountScreen extends HookWidget {
         child: InfiniteList(
           anchor: 1,
           direction: InfiniteListDirection.multi,
-          minChildCount: dates.length * -1,
-          maxChildCount: 0,
+          negChildCount: dates.length * -1,
+          posChildCount: 0,
           builder: (BuildContext context, int index) {
             final date = dates[(index * -1) - 1];
 

@@ -4,8 +4,8 @@ import 'dart:math';
 
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:moor/ffi.dart';
 import 'package:moor/moor.dart';
-import 'package:moor_ffi/moor_ffi.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:xdg_directories/xdg_directories.dart' as xdg;
