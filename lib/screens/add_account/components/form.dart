@@ -75,7 +75,7 @@ class AddAccountForm extends HookWidget {
             ),
             keyboardType: TextInputType.number,
             inputFormatters: [
-              WhitelistingTextInputFormatter(
+              FilteringTextInputFormatter.allow(
                 RegExp(r'[\d\.\-]'),
               )
             ],

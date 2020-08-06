@@ -40,7 +40,6 @@ class TransactionListItem extends StatelessWidget {
             ],
           ),
           Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(currency.formatAmount(txnBundle.transaction.amount)),
