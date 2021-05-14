@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:moneyman/components/raised_button_loading.dart';
 
 import '../../../database.dart';
 
@@ -92,11 +93,11 @@ class AddAccountForm extends HookWidget {
           ),
           Container(
             margin: const EdgeInsets.only(top: 30),
-            child: RaisedButton(
+            child: RaisedButtonLoading(
               color: Theme.of(context).primaryColor,
-              onPressed: () {
+              onPressed: () async {
                 if (!formKey.value.currentState.validate()) return;
-                createAccount(account.value);
+                await createAccount(account.value);
               },
               child: const Text(
                 'Create Account',
@@ -109,7 +110,7 @@ class AddAccountForm extends HookWidget {
     );
   }
 
-  void createAccount(AccountFormValues values) {
+  Future<void> createAccount(AccountFormValues values) async {
     print(values);
   }
 }
