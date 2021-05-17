@@ -1,3 +1,4 @@
+import 'package:moneyman/repositories/accounts.dart';
 import 'package:moor/moor.dart';
 
 import '../database.dart';
@@ -5,10 +6,13 @@ import '../database.dart';
 part 'accounts.g.dart';
 
 @UseDao(tables: [Accounts, Currency, Transactions], include: {'accounts.moor'})
-class AccountDao extends DatabaseAccessor<AppDatabase> with _$AccountDaoMixin {
+class AccountDao extends DatabaseAccessor<AppDatabase>
+    with _$AccountDaoMixin
+    implements AccountsRepository {
   AccountDao(AppDatabase db) : super(db);
 
-  Future<List<AccountBundle>> getAllAccounts() async {
+  @override
+  Future<List<AccountBundle>> getAll() async {
     final data = await accountBundles(const Constant(true)).get();
     return data
         .map((ad) => AccountBundle(
@@ -19,9 +23,11 @@ class AccountDao extends DatabaseAccessor<AppDatabase> with _$AccountDaoMixin {
         .toList();
   }
 
+  @override
   Future<Account> getAccount(int id) =>
       (select(accounts)..where((a) => a.id.equals(id))).getSingle();
 
+  @override
   Future<int> getBalance(Account account) async {
     final data = await accountBundles(
       accounts.id.equals(account.id),
@@ -29,8 +35,23 @@ class AccountDao extends DatabaseAccessor<AppDatabase> with _$AccountDaoMixin {
     return data.balance;
   }
 
-  Future<int> insertAccount(Account account) => into(accounts).insert(account);
-  Future<bool> updateAccount(Account account) =>
+  @override
+  Future<int> createAccount({
+    @required String name,
+    @required int typeId,
+    @required int currencyId,
+    int startingBalance,
+  }) =>
+      into(accounts).insert(AccountsCompanion.insert(
+          name: name,
+          typeId: typeId,
+          currencyId: currencyId,
+          startingBalance: Value(startingBalance)));
+
+  Future<bool> updateAccount(AccountsCompanion account) =>
       update(accounts).replace(account);
-  Future deleteAccount(Account account) => delete(accounts).delete(account);
+
+  @override
+  Future deleteAccount(int id) =>
+      (delete(accounts)..where((a) => a.id.equals(id))).go();
 }

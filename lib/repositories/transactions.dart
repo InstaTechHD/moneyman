@@ -1,29 +1,21 @@
-import '../daos/transactions.dart';
+import 'package:flutter/foundation.dart';
+
 import '../database.dart';
-import 'repository.dart';
 
-abstract class TransactionsRepository extends Repository<TXN, int> {
+abstract class TransactionsRepository {
+  Future<TXN> getTransaction(int id);
   Future<List<TXNBundle>> getAll(int accountId);
-}
 
-class TransactionsLocalRepository implements TransactionsRepository {
-  final TransactionDao dao;
-
-  TransactionsLocalRepository(AppDatabase db) : dao = TransactionDao(db);
-
-  @override
-  Future<int> create(TXN transaction) => dao.insertTransaction(transaction);
-
-  @override
-  Future delete(TXN transaction) => dao.deleteTransaction(transaction);
-
-  @override
-  Future<TXN> get(int id) => dao.getTransaction(id);
-
-  @override
-  Future<List<TXNBundle>> getAll(int accountId) =>
-      dao.getAllTransactions(accountId);
-
-  @override
-  Future update(TXN transaction) => dao.updateTransaction(transaction);
+  Future<int> createTransaction({
+    @required int accountId,
+    @required int typeId,
+    @required DateTime date,
+    @required int statusId,
+    int payeeId,
+    @required int categoryId,
+    @required int amount,
+    String notes,
+    bool split,
+    int parentId,
+  });
 }

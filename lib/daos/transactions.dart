@@ -1,3 +1,4 @@
+import 'package:moneyman/repositories/transactions.dart';
 import 'package:moor/moor.dart';
 
 import '../database.dart';
@@ -6,10 +7,12 @@ part 'transactions.g.dart';
 
 @UseDao(tables: [Transactions, Categories, Payees])
 class TransactionDao extends DatabaseAccessor<AppDatabase>
-    with _$TransactionDaoMixin {
+    with _$TransactionDaoMixin
+    implements TransactionsRepository {
   TransactionDao(AppDatabase db) : super(db);
 
-  Future<List<TXNBundle>> getAllTransactions(int accountId) async {
+  @override
+  Future<List<TXNBundle>> getAll(int accountId) async {
     dynamic expr = select(transactions)
       ..where((t) => t.accountId.equals(accountId))
       ..orderBy([
@@ -41,10 +44,35 @@ class TransactionDao extends DatabaseAccessor<AppDatabase>
     }).toList() as List<TXNBundle>;
   }
 
+  @override
   Future<TXN> getTransaction(int id) =>
       (select(transactions)..where((t) => t.id.equals(id))).getSingle();
-  Future<int> insertTransaction(TXN transaction) =>
-      into(transactions).insert(transaction);
+
+  @override
+  Future<int> createTransaction({
+    @required int accountId,
+    @required int typeId,
+    @required DateTime date,
+    @required int statusId,
+    int payeeId,
+    @required int categoryId,
+    @required int amount,
+    String notes,
+    bool split,
+    int parentId,
+  }) =>
+      into(transactions).insert(TransactionsCompanion.insert(
+          accountId: accountId,
+          typeId: typeId,
+          date: date,
+          statusId: statusId,
+          payeeId: Value(payeeId),
+          categoryId: categoryId,
+          amount: amount,
+          notes: Value(notes),
+          split: Value(split),
+          parentId: Value(parentId)));
+
   Future<bool> updateTransaction(TXN transaction) =>
       update(transactions).replace(transaction);
   Future deleteTransaction(TXN transaction) =>

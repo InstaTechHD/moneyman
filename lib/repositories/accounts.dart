@@ -1,32 +1,16 @@
-import '../daos/accounts.dart';
-import '../database.dart';
-import 'repository.dart';
+import 'package:flutter/foundation.dart';
 
-abstract class AccountsRepository extends Repository<Account, int> {
+import '../database.dart';
+
+abstract class AccountsRepository {
+  Future<Account> getAccount(int id);
+  Future deleteAccount(int id);
   Future<List<AccountBundle>> getAll();
   Future<int> getBalance(Account account);
-}
-
-class AccountsLocalRepository implements AccountsRepository {
-  final AccountDao dao;
-
-  AccountsLocalRepository(AppDatabase db) : dao = AccountDao(db);
-
-  @override
-  Future<int> create(Account account) => dao.insertAccount(account);
-
-  @override
-  Future delete(Account account) => dao.deleteAccount(account);
-
-  @override
-  Future<Account> get(int id) => dao.getAccount(id);
-
-  @override
-  Future<List<AccountBundle>> getAll() => dao.getAllAccounts();
-
-  @override
-  Future<int> getBalance(Account account) => dao.getBalance(account);
-
-  @override
-  Future update(Account account) => dao.updateAccount(account);
+  Future<int> createAccount({
+    @required String name,
+    @required int typeId,
+    @required int currencyId,
+    int startingBalance,
+  });
 }

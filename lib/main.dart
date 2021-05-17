@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'daos/accounts.dart';
+import 'daos/currencies.dart';
+import 'daos/transactions.dart';
 import 'database.dart';
-import 'repositories/accounts.dart';
-import 'repositories/currencies.dart';
-import 'repositories/transactions.dart';
 import 'routes.dart';
 import 'services/accounts.dart';
 import 'services/currencies.dart';
@@ -20,13 +20,13 @@ class App extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider<AccountsService>(
-          create: (_) => AccountsService(AccountsLocalRepository(_db)),
+          create: (_) => AccountsService(AccountDao(_db)),
         ),
         Provider<CurrenciesService>(
-          create: (_) => CurrenciesService(CurrenciesLocalRepository(_db)),
+          create: (_) => CurrenciesService(CurrencyDao(_db)),
         ),
         Provider<TransactionsService>(
-          create: (_) => TransactionsService(TransactionsLocalRepository(_db)),
+          create: (_) => TransactionsService(TransactionDao(_db)),
         ),
       ],
       child: MaterialApp(
