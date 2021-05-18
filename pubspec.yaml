@@ -25,22 +25,21 @@ dependencies:
   flutter:
     sdk: flutter
   collection: ^1.14.12
-  flutter_hooks: ^0.13.0
-  intl: ^0.16.1
-  moor: ^3.3.0
-  path_provider: ^1.6.9
-  path: ^1.6.4
-  provider: ^4.1.2
-  sqlite3_flutter_libs: ^0.2.0
-  sticky_infinite_list: ^3.0.0
-  xdg_directories: ^0.1.0
+  flutter_hooks: ^0.17.0
+  intl: ^0.17.0
+  moor: ^4.3.0
+  path_provider: ^2.0.1
+  path: ^1.8.0
+  provider: ^5.0.0
+  sqlite3_flutter_libs: ^0.4.2
+  sticky_infinite_list: ^4.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  build_runner: ^1.10.1
-  lint: ^1.2.0
-  moor_generator: ^3.1.0
+  build_runner: ^2.0.3
+  lint: ^1.5.3
+  moor_generator: ^4.3.0
 
 flutter:
 
