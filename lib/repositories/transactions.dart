@@ -7,13 +7,13 @@ abstract class TransactionsRepository {
   Future<List<TXNBundle>> getAll(int accountId);
 
   Future<int> createTransaction({
-    @required int accountId,
-    @required int typeId,
-    @required DateTime date,
-    @required int statusId,
+    required int accountId,
+    required int typeId,
+    required DateTime date,
+    required int statusId,
     int payeeId,
-    @required int categoryId,
-    @required int amount,
+    required int categoryId,
+    required int amount,
     String notes,
     bool split,
     int parentId,

@@ -8,8 +8,8 @@ class AccountListItem extends StatelessWidget {
 
   const AccountListItem({
     Key key,
-    @required this.account,
-    @required this.balance,
+    required this.account,
+    required this.balance,
   }) : super(key: key);
 
   @override

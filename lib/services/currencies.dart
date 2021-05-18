@@ -12,11 +12,11 @@ class CurrenciesService {
   Future<Currency> getCurrency(int id) => repo.getCurrency(id);
   Future<List<Currency>> getCurrencies() => repo.getAll();
   Future<int> createCurrency(
-          {@required String code,
-          @required String symbol,
-          @required int numDecimals,
-          @required bool symbolBefore,
-          @required bool custom}) =>
+          {required String code,
+          required String symbol,
+          required int numDecimals,
+          required bool symbolBefore,
+          required bool custom}) =>
       repo.createCurrency(
           code: code,
           symbol: symbol,

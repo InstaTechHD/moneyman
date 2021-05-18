@@ -20,11 +20,11 @@ class CurrencyDao extends DatabaseAccessor<AppDatabase>
 
   @override
   Future<int> createCurrency({
-    @required String code,
-    @required String symbol,
-    @required int numDecimals,
-    @required bool symbolBefore,
-    @required bool custom,
+    required String code,
+    required String symbol,
+    required int numDecimals,
+    required bool symbolBefore,
+    required bool custom,
   }) =>
       into(currencies).insert(CurrenciesCompanion.insert(
           code: code,

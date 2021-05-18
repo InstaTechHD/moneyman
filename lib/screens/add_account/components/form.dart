@@ -10,8 +10,7 @@ import '../../../database.dart';
 class AddAccountForm extends HookWidget {
   final Iterable<Currency> currencies;
 
-  const AddAccountForm({@required this.currencies})
-      : assert(currencies != null);
+  const AddAccountForm({required this.currencies}) : assert(currencies != null);
 
   @override
   Widget build(BuildContext context) {

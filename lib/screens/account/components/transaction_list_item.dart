@@ -9,9 +9,9 @@ class TransactionListItem extends StatelessWidget {
 
   const TransactionListItem({
     Key key,
-    @required this.txnBundle,
-    @required this.currency,
-    @required this.runningBalance,
+    required this.txnBundle,
+    required this.currency,
+    required this.runningBalance,
   }) : super(key: key);
 
   @override

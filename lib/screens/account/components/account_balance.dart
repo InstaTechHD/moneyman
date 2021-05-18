@@ -8,8 +8,8 @@ class AccountBalance extends StatelessWidget {
 
   const AccountBalance({
     Key key,
-    @required this.accountBalance,
-    @required this.currency,
+    required this.accountBalance,
+    required this.currency,
   }) : super(key: key);
 
   @override

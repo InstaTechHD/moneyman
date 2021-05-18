@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 import '../database.dart';
 import '../repositories/accounts.dart';
 
@@ -12,9 +10,9 @@ class AccountsService {
   Future<Account> getAccount(int id) => repo.getAccount(id);
   Future<List<AccountBundle>> getAccounts() => repo.getAll();
   Future<int> createAccount({
-    @required String name,
-    @required AccountType type,
-    @required int currencyId,
+    required String name,
+    required AccountType type,
+    required int currencyId,
     int startingBalance,
   }) =>
       repo.createAccount(

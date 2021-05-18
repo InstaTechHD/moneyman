@@ -25,7 +25,7 @@ class TXNBundle {
   final Category category;
   final Payee payee;
 
-  TXNBundle({@required this.transaction, this.category, this.payee});
+  TXNBundle({required this.transaction, this.category, this.payee});
 }
 
 enum TransactionStatus {

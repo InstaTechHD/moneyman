@@ -37,9 +37,9 @@ class AccountDao extends DatabaseAccessor<AppDatabase>
 
   @override
   Future<int> createAccount({
-    @required String name,
-    @required int typeId,
-    @required int currencyId,
+    required String name,
+    required int typeId,
+    required int currencyId,
     int startingBalance,
   }) =>
       into(accounts).insert(AccountsCompanion.insert(

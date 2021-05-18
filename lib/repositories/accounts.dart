@@ -8,9 +8,9 @@ abstract class AccountsRepository {
   Future<List<AccountBundle>> getAll();
   Future<int> getBalance(Account account);
   Future<int> createAccount({
-    @required String name,
-    @required int typeId,
-    @required int currencyId,
+    required String name,
+    required int typeId,
+    required int currencyId,
     int startingBalance,
   });
 }

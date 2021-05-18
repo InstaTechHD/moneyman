@@ -15,7 +15,7 @@ class AccountBundle {
   final int balance;
 
   AccountBundle({
-    @required this.account,
+    required this.account,
     this.currency,
     this.balance,
   });
